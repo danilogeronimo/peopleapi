@@ -29,7 +29,6 @@ public class Person {
     @Column(nullable = false, unique = true) //não nulo e único (melhora indexaca)
     private String cpf;
 
-    @Column(nullable = false)
     private LocalDate birthDate;
 
     @OneToMany(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}) //
