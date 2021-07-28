@@ -86,7 +86,6 @@
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
 							<groupId>org.mapstruct</groupId>
-							<version>${lombok.version}</version>
 							<artifactId>mapstruct-processor</artifactId>
 						</exclude>
 					</excludes>
