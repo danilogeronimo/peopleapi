@@ -1,7 +1,9 @@
 package one.digitalinnovation.personapi.service;
 
+import one.digitalinnovation.personapi.dto.request.PersonDTO;
 import one.digitalinnovation.personapi.dto.response.MessageResponseDTO;
 import one.digitalinnovation.personapi.entity.Person;
+import one.digitalinnovation.personapi.mapper.PersonMapper;
 import one.digitalinnovation.personapi.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,8 @@ public class PersonService {
 
     private PersonRepository personRepository;
 
+    private final PersonMapper personMapper = PersonMapper.INSTANCE;
+
     //construtor para injeção de dependencias
     @Autowired
     public PersonService(PersonRepository personRepository) {
@@ -23,8 +27,9 @@ public class PersonService {
     }
 
     //passa o corpo da requisição, através do arguimento entidade person
-    public MessageResponseDTO createPerson(Person person){
-        Person savedPerson = personRepository.save(person);
+    public MessageResponseDTO createPerson(PersonDTO personDTO){
+        Person personToSave = personMapper.toModel(personDTO);
+        Person savedPerson = personRepository.save(personToSave);
         //o @Builder permite instanciar a classe sem usar o construtor, de uma forma mais encapsulada e ainda fazer um tratamento dos dados de entrada (.message())
         return MessageResponseDTO
                 .builder()
