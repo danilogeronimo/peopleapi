@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 //informa o spring que vai ser uma classe uma classe responsavel pelas regras de negócio
 // trata melhor suporte transacional, entre outros especificações de serviço
 
@@ -37,5 +40,14 @@ public class PersonService {
                 .build();
     }
 
-
+    public List<PersonDTO> listAll() {
+        List<Person> allPeople = personRepository.findAll();
+        // el precisa retornar um objeto personDTO
+        // a stream manipula/transforma dados em coleções
+        // o map será responsável por converter cada linha da list em DTO
+        //e o resultado será jogado numa lista (collectors)
+        return allPeople.stream()
+                .map(personMapper::toDTO)
+                .collect(Collectors.toList());
+    }
 }
