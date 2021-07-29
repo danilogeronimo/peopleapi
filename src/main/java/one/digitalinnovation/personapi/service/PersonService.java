@@ -60,11 +60,17 @@ public class PersonService {
 //            throw  new PersonNotFoundException(id);
 //        }
 //        return personMapper.toDTO(optionalPerson.get());
+        return personMapper.toDTO(returnPerson(id));
+    }
 
-        return personMapper.toDTO(personRepository
-            .findById(id)
-            .orElseThrow(()->new PersonNotFoundException(id))
-        );
+    private Person returnPerson(Long id) throws PersonNotFoundException {
+        return personRepository
+                .findById(id)
+                .orElseThrow(()->new PersonNotFoundException(id));
+    }
 
+    public void delete(Long id) throws PersonNotFoundException {
+        returnPerson(id);
+        personRepository.deleteById(id);
     }
 }
