@@ -8,11 +8,8 @@ import one.digitalinnovation.personapi.mapper.PersonMapper;
 import one.digitalinnovation.personapi.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 //informa o spring que vai ser uma classe uma classe responsavel pelas regras de negócio
@@ -36,9 +33,22 @@ public class PersonService {
         Person personToSave = personMapper.toModel(personDTO);
         Person savedPerson = personRepository.save(personToSave);
         //o @Builder permite instanciar a classe sem usar o construtor, de uma forma mais encapsulada e ainda fazer um tratamento dos dados de entrada (.message())
+        return createMsgResponse(savedPerson.getId(), "Person Created!");
+    }
+
+    public MessageResponseDTO updatePerson(Long id, PersonDTO personDTO) throws PersonNotFoundException {
+        verifyPerson(id);
+
+        Person personToSave = personMapper.toModel(personDTO);
+        Person savedPerson = personRepository.save(personToSave);
+
+        return createMsgResponse(savedPerson.getId(), "Person Updated!");
+    }
+
+    private MessageResponseDTO createMsgResponse(Long id, String msg) {
         return MessageResponseDTO
                 .builder()
-                .message("Created person with ID " + savedPerson.getId())
+                .message(msg + id)
                 .build();
     }
 
@@ -60,17 +70,17 @@ public class PersonService {
 //            throw  new PersonNotFoundException(id);
 //        }
 //        return personMapper.toDTO(optionalPerson.get());
-        return personMapper.toDTO(returnPerson(id));
+        return personMapper.toDTO(verifyPerson(id));
     }
 
-    private Person returnPerson(Long id) throws PersonNotFoundException {
+    private Person verifyPerson(Long id) throws PersonNotFoundException {
         return personRepository
                 .findById(id)
                 .orElseThrow(()->new PersonNotFoundException(id));
     }
 
     public void delete(Long id) throws PersonNotFoundException {
-        returnPerson(id);
+        verifyPerson(id);
         personRepository.deleteById(id);
     }
 }

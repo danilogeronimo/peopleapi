@@ -30,6 +30,11 @@ public class PersonController {
         return personService.createPerson(personDTO);
     }
 
+    @PutMapping("/{id}")
+    public MessageResponseDTO updatePerson(@PathVariable Long id, @RequestBody @Valid PersonDTO personDTO) throws PersonNotFoundException {
+        return personService.updatePerson(id, personDTO);
+    }
+
     //tipo getter
     @GetMapping
     public List<PersonDTO> listAll(){
