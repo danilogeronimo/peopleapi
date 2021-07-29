@@ -45,16 +45,9 @@ public class PersonService {
         return createMsgResponse(savedPerson.getId(), "Person Updated!");
     }
 
-    private MessageResponseDTO createMsgResponse(Long id, String msg) {
-        return MessageResponseDTO
-                .builder()
-                .message(msg + id)
-                .build();
-    }
-
     public List<PersonDTO> listAll() {
         List<Person> allPeople = personRepository.findAll();
-        // el precisa retornar um objeto personDTO
+        // ele precisa retornar um objeto personDTO
         // a stream manipula/transforma dados em coleções
         // o map será responsável por converter cada linha da list em DTO
         //e o resultado será jogado numa lista (collectors)
@@ -73,14 +66,21 @@ public class PersonService {
         return personMapper.toDTO(verifyPerson(id));
     }
 
+    public void delete(Long id) throws PersonNotFoundException {
+        verifyPerson(id);
+        personRepository.deleteById(id);
+    }
+
     private Person verifyPerson(Long id) throws PersonNotFoundException {
         return personRepository
                 .findById(id)
                 .orElseThrow(()->new PersonNotFoundException(id));
     }
 
-    public void delete(Long id) throws PersonNotFoundException {
-        verifyPerson(id);
-        personRepository.deleteById(id);
+    private MessageResponseDTO createMsgResponse(Long id, String msg) {
+        return MessageResponseDTO
+                .builder()
+                .message(msg + id)
+                .build();
     }
 }
