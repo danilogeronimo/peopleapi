@@ -29,7 +29,7 @@ public class PersonService {
         Person personToSave = personMapper.toModel(personDTO);
         Person savedPerson = personRepository.save(personToSave);
         //o @Builder permite instanciar a classe sem usar o construtor, de uma forma mais encapsulada e ainda fazer um tratamento dos dados de entrada (.message())
-        return createMsgResponse(savedPerson.getId(), "Person Created!");
+        return createMsgResponse(savedPerson.getId(), "Person Created: ");
     }
 
     public MessageResponseDTO updatePerson(Long id, PersonDTO personDTO) throws PersonNotFoundException {
